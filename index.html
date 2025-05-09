@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="shortcut icon" href="./bolo.png" />
   <style>
     :root {
       --primary-color: #e63946;
@@ -486,6 +487,154 @@
       font-size: 0.9rem;
     }
 
+    /* Estilos para o carrinho */
+    .cart-icon {
+      position: relative;
+    }
+    
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: var(--accent-color);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .cart-modal .modal-content {
+      border-radius: 20px;
+      border: none;
+      overflow: hidden;
+    }
+    
+    .cart-modal .modal-header {
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      color: white;
+      border: none;
+      padding: 1.5rem;
+    }
+    
+    .cart-modal .modal-title {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.8rem;
+    }
+    
+    .cart-modal .modal-body {
+      padding: 2rem;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+    
+    .cart-item {
+      display: flex;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .cart-item-img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-right: 1.5rem;
+    }
+    
+    .cart-item-details {
+      flex-grow: 1;
+    }
+    
+    .cart-item-title {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      color: var(--chocolate-color);
+      margin-bottom: 0.5rem;
+    }
+    
+    .cart-item-price {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+    
+    .cart-item-quantity {
+      display: flex;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+    
+    .quantity-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #f0f0f0;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .quantity-btn:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .quantity-input {
+      width: 40px;
+      text-align: center;
+      margin: 0 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 5px;
+    }
+    
+    .remove-item {
+      color: #999;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-left: 1rem;
+    }
+    
+    .remove-item:hover {
+      color: var(--primary-color);
+    }
+    
+    .cart-summary {
+      padding: 1.5rem;
+      border-top: 1px solid #eee;
+    }
+    
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .cart-empty {
+      text-align: center;
+      padding: 2rem;
+      font-family: 'Quicksand', sans-serif;
+      color: #777;
+    }
+    
+    .cart-empty-icon {
+      font-size: 3rem;
+      color: #ddd;
+      margin-bottom: 1rem;
+    }
+
     /* Responsividade */
     @media (max-width: 992px) {
       .hero-title {
@@ -526,6 +675,16 @@
       
       .btn-custom {
         padding: 12px 25px;
+      }
+      
+      .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .cart-item-img {
+        margin-right: 0;
+        margin-bottom: 1rem;
       }
     }
   </style>
@@ -615,6 +774,35 @@
     </div>
   </div>
 
+  <!-- Modal do Carrinho -->
+  <div class="modal fade cart-modal" id="cartModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Seu Carrinho</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="cartItemsContainer">
+          <!-- Itens do carrinho serão adicionados aqui dinamicamente -->
+          <div class="cart-empty">
+            <div class="cart-empty-icon">
+              <i class="bi bi-cart-x"></i>
+            </div>
+            <h5>Seu carrinho está vazio</h5>
+            <p>Adicione produtos para continuar</p>
+          </div>
+        </div>
+        <div class="cart-summary" id="cartSummary" style="display: none;">
+          <div class="cart-total">
+            <span>Total:</span>
+            <span id="cartTotal">R$ 0,00</span>
+          </div>
+          <button class="btn btn-custom w-100" id="checkoutBtn">Finalizar Compra</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container">
@@ -638,6 +826,12 @@
           <li class="nav-item">
             <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
               <i class="bi bi-person"></i> Login
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link cart-icon" href="#" data-bs-toggle="modal" data-bs-target="#cartModal">
+              <i class="bi bi-cart3"></i>
+              <span class="cart-count" id="cartCount">0</span>
             </a>
           </li>
         </ul>
@@ -673,7 +867,7 @@
               <p class="card-text">Nosso famoso bolo de chocolate com recheio de brigadeiro e cobertura de ganache.</p>
               <div class="d-flex justify-content-between align-items-center mt-auto">
                 <span class="price">R$ 85,00</span>
-                <a href="#" class="btn btn-outline-custom">Encomendar</a>
+                <button class="btn btn-outline-custom add-to-cart" data-id="1" data-name="Bolo de Chocolate" data-price="85.00" data-image="./bolo de chocolate.jpg">Encomendar</button>
               </div>
             </div>
           </div>
@@ -688,7 +882,7 @@
               <p class="card-text">Deliciosos cupcakes com diversos sabores e decorações personalizadas.</p>
               <div class="d-flex justify-content-between align-items-center mt-auto">
                 <span class="price">R$ 8,00/un</span>
-                <a href="#" class="btn btn-outline-custom">Encomendar</a>
+                <button class="btn btn-outline-custom add-to-cart" data-id="2" data-name="Cupcakes Variados" data-price="8.00" data-image="./cupcakes.jpg">Encomendar</button>
               </div>
             </div>
           </div>
@@ -703,7 +897,7 @@
               <p class="card-text">Variedade de salgados para festas e eventos, fritos na hora.</p>
               <div class="d-flex justify-content-between align-items-center mt-auto">
                 <span class="price">R$ 3,00/un</span>
-                <a href="#" class="btn btn-outline-custom">Encomendar</a>
+                <button class="btn btn-outline-custom add-to-cart" data-id="3" data-name="Salgados de Festa" data-price="3.00" data-image="./salgadinhos.webp">Encomendar</button>
               </div>
             </div>
           </div>
@@ -719,7 +913,7 @@
               <p class="card-text">Ovo de chocolate ao leite 500g com recheio de brigadeiro e confeitos coloridos.</p>
               <div class="d-flex justify-content-between align-items-center mt-auto">
                 <span class="price">R$ 65,00</span>
-                <a href="#" class="btn btn-outline-custom">Encomendar</a>
+                <button class="btn btn-outline-custom add-to-cart" data-id="4" data-name="Ovo de Páscoa Tradicional" data-price="65.00" data-image="./ovos-de-pascoa-diferentes-sabores.webp">Encomendar</button>
               </div>
             </div>
           </div>
@@ -734,7 +928,7 @@
               <p class="card-text">Ovo de chocolate belga 700g com recheio de nutella e pedaços de avelã.</p>
               <div class="d-flex justify-content-between align-items-center mt-auto">
                 <span class="price">R$ 105,00</span>
-                <a href="#" class="btn btn-outline-custom">Encomendar</a>
+                <button class="btn btn-outline-custom add-to-cart" data-id="5" data-name="Ovo de Páscoa Premium" data-price="105.00" data-image="./Ovo-de-Pascoa-com-Recheio-de-Nutella.webp">Encomendar</button>
               </div>
             </div>
           </div>
@@ -749,7 +943,7 @@
               <p class="card-text">Delicioso ovo de ferrero rocher com deliosas nozes de cobertura.</p>
               <div class="d-flex justify-content-between align-items-center mt-auto">
                 <span class="price">R$ 90,00</span>
-                <a href="#" class="btn btn-outline-custom">Encomendar</a>
+                <button class="btn btn-outline-custom add-to-cart" data-id="6" data-name="Ovo de Páscoa de Ferrero Rocher" data-price="90.00" data-image="./ferrero rocher.webp">Encomendar</button>
               </div>
             </div>
           </div>
@@ -871,6 +1065,161 @@
 
   <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    // Carrinho de compras
+    let cart = [];
+    
+    // Função para atualizar o contador do carrinho
+    function updateCartCount() {
+      const count = cart.reduce((total, item) => total + item.quantity, 0);
+      document.getElementById('cartCount').textContent = count;
+    }
+    
+    // Função para atualizar o carrinho no modal
+    function updateCartModal() {
+      const cartItemsContainer = document.getElementById('cartItemsContainer');
+      const cartSummary = document.getElementById('cartSummary');
+      
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = `
+          <div class="cart-empty">
+            <div class="cart-empty-icon">
+              <i class="bi bi-cart-x"></i>
+            </div>
+            <h5>Seu carrinho está vazio</h5>
+            <p>Adicione produtos para continuar</p>
+          </div>
+        `;
+        cartSummary.style.display = 'none';
+        return;
+      }
+      
+      cartItemsContainer.innerHTML = '';
+      let total = 0;
+      
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        
+        const itemElement = document.createElement('div');
+        itemElement.className = 'cart-item';
+        itemElement.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+          <div class="cart-item-details">
+            <h6 class="cart-item-title">${item.name}</h6>
+            <div class="cart-item-price">R$ ${item.price.toFixed(2)}</div>
+            <div class="cart-item-quantity">
+              <button class="quantity-btn decrease-quantity" data-index="${index}">-</button>
+              <input type="number" class="quantity-input" value="${item.quantity}" min="1" data-index="${index}">
+              <button class="quantity-btn increase-quantity" data-index="${index}">+</button>
+              <span class="remove-item" data-index="${index}"><i class="bi bi-trash"></i></span>
+            </div>
+          </div>
+        `;
+        
+        cartItemsContainer.appendChild(itemElement);
+      });
+      
+      document.getElementById('cartTotal').textContent = `R$ ${total.toFixed(2)}`;
+      cartSummary.style.display = 'block';
+    }
+    
+    // Adicionar produto ao carrinho
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('add-to-cart')) {
+        const id = e.target.getAttribute('data-id');
+        const name = e.target.getAttribute('data-name');
+        const price = parseFloat(e.target.getAttribute('data-price'));
+        const image = e.target.getAttribute('data-image');
+        
+        // Verifica se o item já está no carrinho
+        const existingItem = cart.find(item => item.id === id);
+        
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cart.push({
+            id,
+            name,
+            price,
+            image,
+            quantity: 1
+          });
+        }
+        
+        updateCartCount();
+        updateCartModal();
+        
+        // Mostra um feedback visual
+        e.target.textContent = 'Adicionado!';
+        e.target.classList.remove('btn-outline-custom');
+        e.target.classList.add('btn-success');
+        
+        setTimeout(() => {
+          e.target.textContent = 'Encomendar';
+          e.target.classList.remove('btn-success');
+          e.target.classList.add('btn-outline-custom');
+        }, 1000);
+      }
+      
+      // Aumentar quantidade
+      if (e.target.classList.contains('increase-quantity')) {
+        const index = e.target.getAttribute('data-index');
+        cart[index].quantity += 1;
+        updateCartModal();
+        updateCartCount();
+      }
+      
+      // Diminuir quantidade
+      if (e.target.classList.contains('decrease-quantity')) {
+        const index = e.target.getAttribute('data-index');
+        if (cart[index].quantity > 1) {
+          cart[index].quantity -= 1;
+          updateCartModal();
+          updateCartCount();
+        }
+      }
+      
+      // Remover item
+      if (e.target.classList.contains('remove-item') || e.target.closest('.remove-item')) {
+        const index = e.target.getAttribute('data-index') || e.target.closest('.remove-item').getAttribute('data-index');
+        cart.splice(index, 1);
+        updateCartModal();
+        updateCartCount();
+      }
+      
+      // Atualizar quantidade via input
+      if (e.target.classList.contains('quantity-input')) {
+        const index = e.target.getAttribute('data-index');
+        const newQuantity = parseInt(e.target.value);
+        
+        if (newQuantity > 0) {
+          cart[index].quantity = newQuantity;
+          updateCartModal();
+          updateCartCount();
+        } else {
+          e.target.value = cart[index].quantity;
+        }
+      }
+    });
+    
+    // Finalizar compra
+    document.getElementById('checkoutBtn').addEventListener('click', function() {
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      alert(`Compra finalizada! Total: R$ ${total.toFixed(2)}\nVocê será redirecionado para a página de pagamento.`);
+      
+      // Aqui você pode adicionar a lógica para redirecionar para a página de pagamento
+      // window.location.href = 'pagamento.html';
+      
+      // Limpar carrinho após finalizar compra
+      cart = [];
+      updateCartCount();
+      updateCartModal();
+      
+      // Fechar o modal do carrinho
+      const cartModal = bootstrap.Modal.getInstance(document.getElementById('cartModal'));
+      cartModal.hide();
+    });
+    
     // Mostra o modal de CADASTRO automaticamente quando a página carrega
     document.addEventListener('DOMContentLoaded', function() {
       var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
@@ -879,17 +1228,6 @@
       document.getElementById('loginFormContainer').style.display = 'none';
       document.getElementById('registerFormContainer').style.display = 'block';
       
-      // Mostra o modal imediatamente ao carregar a página
-      loginModal.show();
-      
-      // Alternar entre formulários de login e cadastro
-      document.getElementById('showRegisterForm').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('loginFormContainer').style.display = 'none';
-        document.getElementById('registerFormContainer').style.display = 'block';
-      });
-      
-      document.getElementById
       // Mostra o modal imediatamente ao carregar a página
       loginModal.show();
       
@@ -962,7 +1300,5 @@
       });
     });
   </script>
-
-  <script src="./index.js"></script>
 </body>
 </html>
