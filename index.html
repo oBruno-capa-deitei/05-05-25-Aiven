@@ -1,15 +1,19 @@
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cheirinho de Bolo - Confeitaria Artesanal</title>
+  <!-- Links CSS -->
   <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./cookies.css" />
   <link rel="shortcut icon" href="./bolo.png" />
- <style>
+  
+  <style>
     :root {
       --primary-color: #e63946;
       --secondary-color: #ff9a8b;
@@ -18,6 +22,7 @@
       --accent-color: #ff686b;
       --cream-color: #fff9f2;
       --chocolate-color: #5c3a21;
+      --success-color: #28a745;
     }
     
     body {
@@ -25,12 +30,15 @@
       color: var(--dark-color);
       background-color: var(--cream-color);
       line-height: 1.6;
+      overflow-x: hidden;
     }
     
+    /* Estilos gerais */
     .logo-font {
       font-family: 'Pacifico', cursive;
     }
     
+    /* Navbar */
     .navbar {
       background-color: var(--primary-color) !important;
       box-shadow: 0 2px 15px rgba(0,0,0,0.1);
@@ -68,6 +76,7 @@
       width: 100%;
     }
     
+    /* Hero Section */
     .hero-section {
       background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
                   url('https://images.unsplash.com/photo-1552689486-f6773047d19f') no-repeat center center;
@@ -110,6 +119,7 @@
       max-width: 600px;
     }
     
+    /* Botões */
     .btn-custom {
       background-color: var(--accent-color);
       border: none;
@@ -130,24 +140,51 @@
       box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
     
-    .btn-custom::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%);
-      background-size: 15px 15px;
-      transform: rotate(30deg);
-      opacity: 0;
-      transition: opacity 0.3s;
+    .btn-outline-custom {
+      color: var(--primary-color);
+      border-color: var(--primary-color);
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s;
+      padding: 8px 20px;
+      font-family: 'Quicksand', sans-serif;
     }
     
-    .btn-custom:hover::before {
-      opacity: 1;
+    .btn-outline-custom:hover {
+      background-color: var(--primary-color);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(230, 57, 70, 0.3);
     }
     
+    .btn-encomendado {
+      background-color: var(--success-color) !important;
+      border-color: var(--success-color) !important;
+      color: white !important;
+    }
+    
+    .btn-order {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-order .check-icon {
+      display: none;
+      margin-right: 5px;
+    }
+    
+    .btn-encomendado .check-icon {
+      display: inline-block !important;
+      animation: fadeIn 0.3s;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.5); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    /* Seções */
     .section-title {
       font-family: 'Pacifico', cursive;
       color: var(--primary-color);
@@ -168,6 +205,7 @@
       border-radius: 2px;
     }
     
+    /* Cards de produtos */
     .card-product {
       border: none;
       border-radius: 20px;
@@ -231,23 +269,7 @@
       font-family: 'Quicksand', sans-serif;
     }
     
-    .btn-outline-custom {
-      color: var(--primary-color);
-      border-color: var(--primary-color);
-      border-radius: 50px;
-      font-weight: 600;
-      transition: all 0.3s;
-      padding: 8px 20px;
-      font-family: 'Quicksand', sans-serif;
-    }
-    
-    .btn-outline-custom:hover {
-      background-color: var(--primary-color);
-      color: white;
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(230, 57, 70, 0.3);
-    }
-    
+    /* Sobre nós */
     .about-section {
       background-color: var(--light-color);
       position: relative;
@@ -285,6 +307,7 @@
       border: 8px solid white;
     }
     
+    /* Depoimentos */
     .testimonial-card {
       border-radius: 20px;
       border: none;
@@ -327,6 +350,7 @@
       font-size: 0.9rem;
     }
     
+    /* Footer */
     footer {
       background-color: var(--dark-color);
       color: white;
@@ -372,7 +396,7 @@
       transform: translateY(-3px);
     }
     
-    /* Estilos para o modal de login */
+    /* Modal de Login/Cadastro */
     .login-modal .modal-content {
       border-radius: 20px;
       border: none;
@@ -450,8 +474,8 @@
       font-weight: 600;
       text-decoration: none;
     }
-
-    /* Novos estilos para o formulário de cadastro */
+    
+    /* Formulário de cadastro */
     .register-form {
       display: none;
     }
@@ -486,7 +510,133 @@
       color: #777;
       font-size: 0.9rem;
     }
-
+    
+    /* Carrinho de compras */
+    #carrinho {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      max-width: 450px;
+      height: 100vh;
+      background-color: white;
+      box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+      z-index: 1050;
+      overflow-y: auto;
+      padding: 2rem;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+    
+    #carrinho[style*="display: block"] {
+      transform: translateX(0);
+    }
+    
+    .modal-open {
+      overflow: hidden;
+    }
+    
+    .img-carrinho {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    
+    .btn-quantidade {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50% !important;
+    }
+    
+    #listaCarrinho .list-group-item {
+      border-left: none;
+      border-right: none;
+      padding: 1.25rem 0;
+    }
+    
+    #listaCarrinho .list-group-item:first-child {
+      border-top: none;
+    }
+    
+    /* Notificação flutuante */
+    .notificacao-carrinho {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--primary-color);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 1100;
+    }
+    
+    .notificacao-carrinho.show {
+      opacity: 1;
+    }
+    
+    /* Contador do carrinho */
+    #contador-carrinho {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--accent-color);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+      display: none;
+    }
+    
+    /* Botão flutuante do carrinho */
+    .btn-carrinho-flutuante {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 5px 20px rgba(230, 57, 70, 0.3);
+      z-index: 1040;
+      border: none;
+    }
+    
+    .btn-carrinho-flutuante:hover {
+      background-color: var(--accent-color);
+      transform: translateY(-3px);
+    }
+    
+    /* Política de privacidade */
+    .politica-privacidade {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      z-index: 1060;
+      overflow-y: auto;
+      padding: 2rem;
+    }
+    
     /* Responsividade */
     @media (max-width: 992px) {
       .hero-title {
@@ -518,6 +668,20 @@
       .card-img-container {
         height: 200px;
       }
+      
+      #carrinho {
+        width: 100%;
+        max-width: 100%;
+      }
+      
+      .img-carrinho {
+        width: 50px;
+        height: 50px;
+      }
+      
+      #listaCarrinho .list-group-item {
+        font-size: 0.9rem;
+      }
     }
     
     @media (max-width: 576px) {
@@ -532,6 +696,8 @@
   </style>
 </head>
 <body>
+  
+  
   <!-- Modal de Login/Cadastro -->
   <div class="modal fade login-modal" id="loginModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
@@ -674,7 +840,8 @@
               <p class="card-text">Nosso famoso bolo de chocolate com recheio de brigadeiro e cobertura de ganache.</p>
               <div class="d-flex justify-content-between align-items-center mt-auto">
                 <span class="price">R$ 85,00</span>
-                <a href="#" class="btn btn-outline-custom">Encomendar</a>
+                <!-- No seu HTML, substitua todos os botões "Encomendar" por: -->
+                <a href="#" class="btn btn-outline-custom btn-order">Encomendar</a>
               </div>
             </div>
           </div>
@@ -689,7 +856,7 @@
               <p class="card-text">Deliciosos cupcakes com diversos sabores e decorações personalizadas.</p>
               <div class="d-flex justify-content-between align-items-center mt-auto">
                 <span class="price">R$ 8,00/un</span>
-                <a href="#" class="btn btn-outline-custom">Encomendar</a>
+                <a href="#" class="btn btn-outline-custom btn-order">Encomendar</a>
               </div>
             </div>
           </div>
@@ -704,7 +871,7 @@
               <p class="card-text">Variedade de salgados para festas e eventos, fritos na hora.</p>
               <div class="d-flex justify-content-between align-items-center mt-auto">
                 <span class="price">R$ 3,00/un</span>
-                <a href="#" class="btn btn-outline-custom">Encomendar</a>
+                <a href="#" class="btn btn-outline-custom btn-order">Encomendar</a>
               </div>
             </div>
           </div>
@@ -720,7 +887,7 @@
               <p class="card-text">Ovo de chocolate ao leite 500g com recheio de brigadeiro e confeitos coloridos.</p>
               <div class="d-flex justify-content-between align-items-center mt-auto">
                 <span class="price">R$ 65,00</span>
-                <a href="#" class="btn btn-outline-custom">Encomendar</a>
+                <a href="#" class="btn btn-outline-custom btn-order">Encomendar</a>
               </div>
             </div>
           </div>
@@ -735,7 +902,7 @@
               <p class="card-text">Ovo de chocolate belga 700g com recheio de nutella e pedaços de avelã.</p>
               <div class="d-flex justify-content-between align-items-center mt-auto">
                 <span class="price">R$ 105,00</span>
-                <a href="#" class="btn btn-outline-custom">Encomendar</a>
+                <a href="#" class="btn btn-outline-custom btn-order">Encomendar</a>
               </div>
             </div>
           </div>
@@ -750,7 +917,7 @@
               <p class="card-text">Delicioso ovo de ferrero rocher com deliosas nozes de cobertura.</p>
               <div class="d-flex justify-content-between align-items-center mt-auto">
                 <span class="price">R$ 90,00</span>
-                <a href="#" class="btn btn-outline-custom">Encomendar</a>
+                <a href="#" class="btn btn-outline-custom btn-order">Encomendar</a>
               </div>
             </div>
           </div>
@@ -963,7 +1130,335 @@
       });
     });
   </script>
+  <script>
+    let carrinho = [];
 
+  document.querySelectorAll('.btn-order').forEach((btn) => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const card = this.closest('.card-product');
+      const nome = card.querySelector('.card-title').innerText;
+      const precoTexto = card.querySelector('.price').innerText;
+      const preco = parseFloat(precoTexto.replace('R$', '').replace(',', '.').trim());
+      const imagem = card.querySelector('.card-img-top').src;
+
+      // Salva o texto original do botão e desabilita temporariamente
+      const originalText = this.innerHTML;
+      const originalClass = this.className;
+      this.disabled = true;
+      
+      // Altera o botão para o estado "Encomendado"
+      this.className = 'btn btn-encomendado';
+      this.innerHTML = '<i class="bi bi-check-circle-fill check-icon"></i> Encomendado!';
+      
+      // Verifica se o item já está no carrinho
+      const itemExistente = carrinho.find(item => item.nome === nome);
+      if (itemExistente) {
+        itemExistente.quantidade++;
+      } else {
+        carrinho.push({ nome, preco, imagem, quantidade: 1 });
+      }
+      
+      // Mostra notificação flutuante
+      mostrarNotificacao(`${nome} foi adicionado ao carrinho.`);
+      atualizarContadorCarrinho();
+      
+      // Retorna o botão ao estado original após 2 segundos
+      setTimeout(() => {
+        this.className = originalClass;
+        this.innerHTML = originalText;
+        this.disabled = false;
+      }, 2000);
+    });
+  });
+
+function mostrarNotificacao(mensagem) {
+  const notificacao = document.createElement('div');
+  notificacao.className = 'notificacao-carrinho';
+  notificacao.textContent = mensagem;
+  document.body.appendChild(notificacao);
+  
+  setTimeout(() => {
+    notificacao.classList.add('show');
+  }, 10);
+  
+  setTimeout(() => {
+    notificacao.classList.remove('show');
+    setTimeout(() => {
+      document.body.removeChild(notificacao);
+    }, 300);
+  }, 3000);
+}
+
+function atualizarContadorCarrinho() {
+  const totalItens = carrinho.reduce((total, item) => total + item.quantidade, 0);
+  const contador = document.getElementById('contador-carrinho');
+  
+  if (totalItens > 0) {
+    contador.textContent = totalItens;
+    contador.style.display = 'block';
+  } else {
+    contador.style.display = 'none';
+  }
+}
+
+function abrirCarrinho() {
+  const lista = document.getElementById('listaCarrinho');
+  const total = document.getElementById('totalCarrinho');
+  lista.innerHTML = '';
+  let totalValor = 0;
+
+  if (carrinho.length === 0) {
+    lista.innerHTML = `
+      <li class="list-group-item text-center py-4">
+        <i class="bi bi-cart-x" style="font-size: 2rem; color: var(--primary-color);"></i>
+        <p class="mt-2">Seu carrinho está vazio</p>
+      </li>
+    `;
+  } else {
+    carrinho.forEach((item, index) => {
+      const subtotal = item.preco * item.quantidade;
+      totalValor += subtotal;
+      
+      const li = document.createElement('li');
+      li.classList.add('list-group-item', 'd-flex', 'align-items-center');
+      li.innerHTML = `
+        <img src="${item.imagem}" class="img-carrinho me-3" alt="${item.nome}">
+        <div class="flex-grow-1">
+          <h6 class="mb-1">${item.nome}</h6>
+          <small class="text-muted">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</small>
+        </div>
+        <div class="d-flex align-items-center">
+          <button class="btn btn-sm btn-outline-secondary btn-quantidade" onclick="alterarQuantidade(${index}, -1)">-</button>
+          <span class="mx-2">${item.quantidade}</span>
+          <button class="btn btn-sm btn-outline-secondary btn-quantidade" onclick="alterarQuantidade(${index}, 1)">+</button>
+          <span class="ms-3 fw-bold">R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
+          <button class="btn btn-link text-danger ms-2" onclick="removerItem(${index})">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      `;
+      lista.appendChild(li);
+    });
+  }
+
+  total.innerHTML = `
+    <div class="d-flex justify-content-between align-items-center">
+      <span>Total:</span>
+      <span class="fs-4 fw-bold" style="color: var(--primary-color);">R$ ${totalValor.toFixed(2).replace('.', ',')}</span>
+    </div>
+    <button onclick="finalizarCompra()" class="btn btn-primary w-100 mt-3 py-2">
+      <i class="bi bi-credit-card me-2"></i> Finalizar Compra
+    </button>
+  `;
+  
+  // Mostra o carrinho com animação
+  const carrinhoElement = document.getElementById('carrinho');
+  carrinhoElement.style.display = 'block';
+  setTimeout(() => {
+    carrinhoElement.style.transform = 'translateX(0)';
+  }, 10);
+  document.body.classList.add('modal-open');
+}
+
+function fecharCarrinho() {
+  const carrinhoElement = document.getElementById('carrinho');
+  carrinhoElement.style.transform = 'translateX(100%)';
+  setTimeout(() => {
+    carrinhoElement.style.display = 'none';
+  }, 300);
+  document.body.classList.remove('modal-open');
+}
+
+function alterarQuantidade(index, delta) {
+  const item = carrinho[index];
+  item.quantidade += delta;
+  
+  if (item.quantidade <= 0) {
+    carrinho.splice(index, 1);
+  }
+  
+  abrirCarrinho();
+  atualizarContadorCarrinho();
+}
+
+function removerItem(index) {
+  carrinho.splice(index, 1);
+  abrirCarrinho();
+  atualizarContadorCarrinho();
+}
+
+function finalizarCompra() {
+  if (carrinho.length === 0) {
+    alert('Seu carrinho está vazio!');
+    return;
+  }
+  
+  let total = carrinho.reduce((acc, prod) => acc + (prod.preco * prod.quantidade), 0);
+  alert(`Compra finalizada! Valor total: R$ ${total.toFixed(2).replace('.', ',')}.\nVocê será redirecionado para a página de pagamento.`);
+  carrinho = [];
+  abrirCarrinho();
+  atualizarContadorCarrinho();
+  // window.location.href = 'pagamento.html'; // Descomente esta linha quando tiver a página de pagamento
+}
+  </script>
+
+  <style>
+    /* Estilos para o carrinho */
+    #carrinho {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      max-width: 450px;
+      height: 100vh;
+      background-color: white;
+      box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+      z-index: 1050;
+      overflow-y: auto;
+      padding: 2rem;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+    
+    #carrinho[style*="display: block"] {
+      transform: translateX(0);
+    }
+    
+    .modal-open {
+      overflow: hidden;
+    }
+    
+    .img-carrinho {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    
+    .btn-quantidade {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50% !important;
+    }
+    
+    #listaCarrinho .list-group-item {
+      border-left: none;
+      border-right: none;
+      padding: 1.25rem 0;
+    }
+    
+    #listaCarrinho .list-group-item:first-child {
+      border-top: none;
+    }
+    
+    /* Notificação flutuante */
+    .notificacao-carrinho {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--primary-color);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 1100;
+    }
+    
+    .notificacao-carrinho.show {
+      opacity: 1;
+    }
+    
+    /* Contador do carrinho */
+    #contador-carrinho {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--accent-color);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+      display: none;
+    }
+    
+    /* Botão do carrinho */
+    .btn-carrinho-flutuante {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 5px 20px rgba(230, 57, 70, 0.3);
+      z-index: 1040;
+      border: none;
+    }
+    
+    .btn-carrinho-flutuante:hover {
+      background-color: var(--accent-color);
+      transform: translateY(-3px);
+    }
+    
+    /* Responsividade */
+    @media (max-width: 576px) {
+      #carrinho {
+        width: 100%;
+        max-width: 100%;
+      }
+      
+      .img-carrinho {
+        width: 50px;
+        height: 50px;
+      }
+      
+      #listaCarrinho .list-group-item {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+  
+  <!-- Adicione este botão flutuante antes do fechamento do body -->
+  <button class="btn-carrinho-flutuante" onclick="abrirCarrinho()">
+    <i class="bi bi-cart"></i>
+    <span id="contador-carrinho"></span>
+  </button>
+  
+  <!-- Atualize a seção do carrinho no HTML -->
+  <div id="carrinho">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">
+        <i class="bi bi-cart3 me-2"></i> Seu Carrinho
+      </h2>
+      <button onclick="fecharCarrinho()" class="btn btn-link text-dark">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    
+    <ul id="listaCarrinho" class="list-group mb-4"></ul>
+    
+    <div id="totalCarrinho"></div>
+  </div>
+
+  <script src="./cookies.js"></script>
+  
   <script src="./index.js"></script>
 </body>
 </html>

@@ -397,7 +397,24 @@
       </div>
       
       <hr class="divider">
-      
+
+      <!-- Botão de Carrinho -->
+      <div class="text-center my-4">
+        <button onclick="abrirCarrinho()" class="btn btn-outline-primary">
+          <i class="bi bi-cart"></i> Ver Carrinho
+        </button>
+      </div>
+
+      <!-- Carrinho -->
+      <!-- <div id="carrinho" class="bg-light p-4 rounded" style="display:none;">
+        <h2>Carrinho</h2>
+        <ul id="listaCarrinho" class="list-group mb-3"></ul>
+        <p id="totalCarrinho" class="fw-bold"></p>
+        <button onclick="finalizarCompra()" class="btn btn-success">Finalizar Compra</button>
+      </div>
+    </div> -->
+  </section>
+
       <!-- Doces -->
       <div class="product-category">
         <h2 class="category-title">Doces</h2>
@@ -550,6 +567,312 @@
       </div>
     </div>
   </footer>
+
+    <!-- ... -->
+
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      let carrinho = [];
+    
+      document.querySelectorAll('.btn-order').forEach((btn) => {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          const card = btn.closest('.card-product');
+          const nome = card.querySelector('.card-title').innerText;
+          const precoTexto = card.querySelector('.price').innerText;
+          const preco = parseFloat(precoTexto.replace('R$', '').replace(',', '.'));
+          const imagem = card.querySelector('.card-img-top').src;
+    
+          // Verifica se o item já está no carrinho
+          const itemExistente = carrinho.find(item => item.nome === nome);
+          if (itemExistente) {
+            itemExistente.quantidade++;
+          } else {
+            carrinho.push({ nome, preco, imagem, quantidade: 1 });
+          }
+          
+          // Mostra notificação flutuante
+          mostrarNotificacao(`${nome} foi adicionado ao carrinho.`);
+          atualizarContadorCarrinho();
+        });
+      });
+    
+      function mostrarNotificacao(mensagem) {
+        const notificacao = document.createElement('div');
+        notificacao.className = 'notificacao-carrinho';
+        notificacao.textContent = mensagem;
+        document.body.appendChild(notificacao);
+        
+        setTimeout(() => {
+          notificacao.classList.add('show');
+        }, 10);
+        
+        setTimeout(() => {
+          notificacao.classList.remove('show');
+          setTimeout(() => {
+            document.body.removeChild(notificacao);
+          }, 300);
+        }, 3000);
+      }
+    
+      function atualizarContadorCarrinho() {
+        const totalItens = carrinho.reduce((total, item) => total + item.quantidade, 0);
+        const contador = document.getElementById('contador-carrinho');
+        
+        if (totalItens > 0) {
+          contador.textContent = totalItens;
+          contador.style.display = 'block';
+        } else {
+          contador.style.display = 'none';
+        }
+      }
+    
+      function abrirCarrinho() {
+        const lista = document.getElementById('listaCarrinho');
+        const total = document.getElementById('totalCarrinho');
+        lista.innerHTML = '';
+        let totalValor = 0;
+    
+        if (carrinho.length === 0) {
+          lista.innerHTML = `
+            <li class="list-group-item text-center py-4">
+              <i class="bi bi-cart-x" style="font-size: 2rem; color: var(--primary-color);"></i>
+              <p class="mt-2">Seu carrinho está vazio</p>
+            </li>
+          `;
+        } else {
+          carrinho.forEach((item, index) => {
+            const subtotal = item.preco * item.quantidade;
+            totalValor += subtotal;
+            
+            const li = document.createElement('li');
+            li.classList.add('list-group-item', 'd-flex', 'align-items-center');
+            li.innerHTML = `
+              <img src="${item.imagem}" class="img-carrinho me-3" alt="${item.nome}">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">${item.nome}</h6>
+                <small class="text-muted">R$ ${item.preco.toFixed(2).replace('.', ',')} cada</small>
+              </div>
+              <div class="d-flex align-items-center">
+                <button class="btn btn-sm btn-outline-secondary btn-quantidade" onclick="alterarQuantidade(${index}, -1)">-</button>
+                <span class="mx-2">${item.quantidade}</span>
+                <button class="btn btn-sm btn-outline-secondary btn-quantidade" onclick="alterarQuantidade(${index}, 1)">+</button>
+                <span class="ms-3 fw-bold">R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
+                <button class="btn btn-link text-danger ms-2" onclick="removerItem(${index})">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            `;
+            lista.appendChild(li);
+          });
+        }
+    
+        total.innerHTML = `
+          <div class="d-flex justify-content-between align-items-center">
+            <span>Total:</span>
+            <span class="fs-4 fw-bold" style="color: var(--primary-color);">R$ ${totalValor.toFixed(2).replace('.', ',')}</span>
+          </div>
+          <button onclick="finalizarCompra()" class="btn btn-primary w-100 mt-3 py-2">
+            <i class="bi bi-credit-card me-2"></i> Finalizar Compra
+          </button>
+        `;
+        
+        document.getElementById('carrinho').style.display = 'block';
+        document.body.classList.add('modal-open');
+      }
+    
+      function fecharCarrinho() {
+        document.getElementById('carrinho').style.display = 'none';
+        document.body.classList.remove('modal-open');
+      }
+    
+      function alterarQuantidade(index, delta) {
+        const item = carrinho[index];
+        item.quantidade += delta;
+        
+        if (item.quantidade <= 0) {
+          carrinho.splice(index, 1);
+        }
+        
+        abrirCarrinho();
+        atualizarContadorCarrinho();
+      }
+    
+      function removerItem(index) {
+        carrinho.splice(index, 1);
+        abrirCarrinho();
+        atualizarContadorCarrinho();
+      }
+    
+      function finalizarCompra() {
+        if (carrinho.length === 0) {
+          alert('Seu carrinho está vazio!');
+          return;
+        }
+        
+        let total = carrinho.reduce((acc, prod) => acc + (prod.preco * prod.quantidade), 0);
+        alert(`Compra finalizada! Valor total: R$ ${total.toFixed(2).replace('.', ',')}.\nVocê será redirecionado para a página de pagamento.`);
+        carrinho = [];
+        abrirCarrinho();
+        atualizarContadorCarrinho();
+        // window.location.href = 'pagamento.html'; // Descomente esta linha quando tiver a página de pagamento
+      }
+    </script>
+    
+    <style>
+      /* Estilos para o carrinho */
+      #carrinho {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
+        max-width: 450px;
+        height: 100vh;
+        background-color: white;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        z-index: 1050;
+        overflow-y: auto;
+        padding: 2rem;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+      }
+      
+      #carrinho[style*="display: block"] {
+        transform: translateX(0);
+      }
+      
+      .modal-open {
+        overflow: hidden;
+      }
+      
+      .img-carrinho {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+      
+      .btn-quantidade {
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50% !important;
+      }
+      
+      #listaCarrinho .list-group-item {
+        border-left: none;
+        border-right: none;
+        padding: 1.25rem 0;
+      }
+      
+      #listaCarrinho .list-group-item:first-child {
+        border-top: none;
+      }
+      
+      /* Notificação flutuante */
+      .notificacao-carrinho {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: var(--primary-color);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 50px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 1100;
+      }
+      
+      .notificacao-carrinho.show {
+        opacity: 1;
+      }
+      
+      /* Contador do carrinho */
+      #contador-carrinho {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: var(--accent-color);
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: bold;
+        display: none;
+      }
+      
+      /* Botão do carrinho */
+      .btn-carrinho-flutuante {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        box-shadow: 0 5px 20px rgba(230, 57, 70, 0.3);
+        z-index: 1040;
+        border: none;
+      }
+      
+      .btn-carrinho-flutuante:hover {
+        background-color: var(--accent-color);
+        transform: translateY(-3px);
+      }
+      
+      /* Responsividade */
+      @media (max-width: 576px) {
+        #carrinho {
+          width: 100%;
+          max-width: 100%;
+        }
+        
+        .img-carrinho {
+          width: 50px;
+          height: 50px;
+        }
+        
+        #listaCarrinho .list-group-item {
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+    
+    <!-- Adicione este botão flutuante antes do fechamento do body -->
+    <button class="btn-carrinho-flutuante" onclick="abrirCarrinho()">
+      <i class="bi bi-cart"></i>
+      <span id="contador-carrinho"></span>
+    </button>
+    
+    <!-- Atualize a seção do carrinho no HTML -->
+    <div id="carrinho">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+          <i class="bi bi-cart3 me-2"></i> Seu Carrinho
+        </h2>
+        <button onclick="fecharCarrinho()" class="btn btn-link text-dark">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      
+      <ul id="listaCarrinho" class="list-group mb-4"></ul>
+      
+      <div id="totalCarrinho"></div>
+    </div>
+  
 
   <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
