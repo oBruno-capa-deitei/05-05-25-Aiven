@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./produtos.css" />
+  <link rel="shortcut icon" href="./bolo.png" />
   <style>
     :root {
       --primary-color: #e63946;
@@ -33,7 +35,7 @@
     
     .navbar {
       background-color: var(--primary-color) !important;
-      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
       padding: 15px 0;
     }
     
@@ -41,10 +43,10 @@
       font-family: 'Pacifico', cursive;
       font-size: 2rem;
       color: white !important;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
     }
     
-    .nav-link {
+    .nav-link { 
       font-family: 'Quicksand', sans-serif;
       font-weight: 500;
       margin: 0 12px;
@@ -227,7 +229,7 @@
       font-weight: 600;
       font-size: 0.9rem;
       z-index: 2;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
     }
     
     footer {
@@ -398,12 +400,8 @@
       
       <hr class="divider">
 
-      <!-- Botão de Carrinho -->
-      <div class="text-center my-4">
-        <button onclick="abrirCarrinho()" class="btn btn-outline-primary">
-          <i class="bi bi-cart"></i> Ver Carrinho
-        </button>
-      </div>
+      
+  
 
       <!-- Carrinho -->
       <!-- <div id="carrinho" class="bg-light p-4 rounded" style="display:none;">
@@ -575,27 +573,40 @@
       let carrinho = [];
     
       document.querySelectorAll('.btn-order').forEach((btn) => {
-        btn.addEventListener('click', function (e) {
-          e.preventDefault();
-          const card = btn.closest('.card-product');
-          const nome = card.querySelector('.card-title').innerText;
-          const precoTexto = card.querySelector('.price').innerText;
-          const preco = parseFloat(precoTexto.replace('R$', '').replace(',', '.'));
-          const imagem = card.querySelector('.card-img-top').src;
-    
-          // Verifica se o item já está no carrinho
-          const itemExistente = carrinho.find(item => item.nome === nome);
-          if (itemExistente) {
-            itemExistente.quantidade++;
-          } else {
-            carrinho.push({ nome, preco, imagem, quantidade: 1 });
-          }
-          
-          // Mostra notificação flutuante
-          mostrarNotificacao(`${nome} foi adicionado ao carrinho.`);
-          atualizarContadorCarrinho();
-        });
-      });
+  btn.addEventListener('click', function (e) {
+    e.preventDefault();
+    const card = btn.closest('.card-product');
+    const nome = card.querySelector('.card-title').innerText;
+    const precoTexto = card.querySelector('.price').innerText;
+    const preco = parseFloat(precoTexto.replace('R$', '').replace(',', '.'));
+    const imagem = card.querySelector('.card-img-top').src;
+
+    // Efeito no botão
+    const textoOriginal = btn.innerHTML;
+    const classeOriginal = btn.className;
+    btn.disabled = true;
+    btn.className = 'btn btn-success btn-order';
+    btn.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> Encomendado!';
+
+    setTimeout(() => {
+      btn.className = classeOriginal;
+      btn.innerHTML = textoOriginal;
+      btn.disabled = false;
+    }, 2000);
+
+    // Adiciona ao carrinho
+    const itemExistente = carrinho.find(item => item.nome === nome);
+    if (itemExistente) {
+      itemExistente.quantidade++;
+    } else {
+      carrinho.push({ nome, preco, imagem, quantidade: 1 });
+    }
+
+    mostrarNotificacao(`${nome} foi adicionado ao carrinho.`);
+    atualizarContadorCarrinho();
+  });
+});
+
     
       function mostrarNotificacao(mensagem) {
         const notificacao = document.createElement('div');
